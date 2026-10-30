@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Busly - Book Your Journey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#17201c;--muted:#69736d;--green:#1f7a4c;--green-dark:#155b39;--lime:#d8ed72;--cream:#f7f8f4;--line:#dde3dc;--white:#fff; }
+    * { box-sizing:border-box; } body { margin:0;font-family:"Manrope",sans-serif;color:var(--ink);background:var(--cream); } button,input,select { font:inherit; } button { cursor:pointer; }
+    header { height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:var(--white);border-bottom:1px solid var(--line); }
+    .brand { display:flex;align-items:center;gap:9px;font-family:"Outfit",sans-serif;font-size:24px;font-weight:700; } .brand-mark { width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--lime); }
+    nav { display:flex;align-items:center;gap:28px; } nav a { color:var(--ink);text-decoration:none;font-size:14px;font-weight:700; } .nav-button { border:1px solid var(--ink);border-radius:6px;padding:10px 16px;background:var(--white);font-weight:700; }
+    .hero { min-height:410px;position:relative;display:grid;align-content:start;padding:56px 5% 130px;color:var(--white);overflow:hidden;background:url("https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1800&q=85") center 58%/cover no-repeat; }
+    .hero::before { content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(12,31,21,.82),rgba(12,31,21,.25)); } .hero-content { position:relative;z-index:1; }
+    .hero h1 { margin:0 0 10px;max-width:590px;font-family:"Outfit",sans-serif;font-size:clamp(38px,5vw,62px);line-height:1.02;letter-spacing:0; } .hero p { margin:0;font-size:17px;opacity:.92; }
+    main { width:min(1120px,90%);margin:-78px auto 40px;position:relative;z-index:2; }
+    .search-panel { display:grid;grid-template-columns:1.15fr 1.15fr .9fr .9fr auto;align-items:end;gap:10px;padding:16px;border-radius:8px;background:var(--white);box-shadow:0 16px 40px rgba(23,32,28,.14); } .field { min-width:0; } .field label { display:block;margin-bottom:7px;color:var(--muted);font-size:12px;font-weight:800; }
+    .control { height:52px;width:100%;display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:5px;background:var(--white);padding:0 12px; } .control input,.control select { width:100%;border:0;outline:0;background:transparent;color:var(--ink);font-weight:700; }
+    .search-button { height:52px;border:0;border-radius:5px;padding:0 24px;background:var(--lime);font-weight:800;white-space:nowrap; }
+    .results-head { display:flex;justify-content:space-between;align-items:end;margin:34px 0 14px; } .results-head h2 { margin:0;font-family:"Outfit",sans-serif;font-size:28px; } .date-tabs { display:flex;gap:7px; }
+    .date-tab { border:1px solid var(--line);border-radius:5px;background:var(--white);padding:8px 12px;color:var(--muted);font-size:12px;font-weight:700; } .date-tab.active { border-color:var(--green);color:var(--green); }
+    .bus-list { display:grid;gap:10px; } .bus-card { display:grid;grid-template-columns:1fr 1fr 110px 120px;align-items:center;gap:20px;min-height:128px;padding:18px 20px;border:1px solid var(--line);border-radius:8px;background:var(--white); }
+    .operator { display:flex;align-items:center;gap:12px; } .operator-icon { width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#edf5ed;color:var(--green);font-size:20px; } .operator strong { display:block; } .operator span { color:var(--muted);font-size:12px; }
+    .time { font-family:"Outfit",sans-serif;font-size:21px; } .route-duration { color:var(--muted);font-size:12px; } .amenities { display:flex;gap:6px;margin-top:8px;flex-wrap:wrap; } .amenity { border-radius:3px;background:var(--cream);padding:4px 7px;color:var(--muted);font-size:10px;font-weight:700; }
+    .price { text-align:right; } .price strong { font-family:"Outfit",sans-serif;font-size:23px; } .select-seat { width:100%;margin-top:8px;border:0;border-radius:5px;padding:10px;background:var(--green);color:var(--white);font-weight:800; } .select-seat:hover { background:var(--green-dark); }
+    .booking-modal { display:none;position:fixed;inset:0;z-index:10;align-items:center;justify-content:center;padding:20px;background:rgba(13,24,18,.58); } .booking-modal.open { display:flex; } .modal-card { width:min(760px,100%);max-height:92vh;overflow-y:auto;border-radius:8px;background:var(--white); }
+    .modal-head { display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line); } .modal-head h3 { margin:0;font-family:"Outfit",sans-serif; } .close { width:36px;height:36px;border:1px solid var(--line);border-radius:50%;background:var(--white);font-size:20px; }
+    .modal-body { display:grid;grid-template-columns:1fr 280px;gap:24px;padding:22px; } .seat-grid { width:230px;display:grid;grid-template-columns:repeat(4,38px);gap:9px;padding:16px;border:1px solid var(--line);border-radius:8px; }
+    .seat { height:38px;border:1px solid var(--line);border-radius:5px 5px 7px 7px;background:var(--white);color:var(--muted);font-size:11px;font-weight:800; } .seat.selected { border-color:var(--green);background:var(--lime);color:var(--ink); } .seat.booked { border-color:#e5e5e5;background:#e5e5e5;color:#aaa;cursor:not-allowed; }
+    .passenger-form label { display:block;margin-bottom:6px;font-size:12px;font-weight:800; } .passenger-form input { width:100%;height:44px;margin-bottom:12px;border:1px solid var(--line);border-radius:5px;padding:0 10px;outline:0; }
+    .summary { padding:16px;border-radius:8px;background:var(--cream); } .summary-row { display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px; } .summary-row.total { margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:16px;font-weight:800; }
+    .confirm { width:100%;height:46px;border:0;border-radius:5px;background:var(--green);color:var(--white);font-weight:800; } .confirmed { padding:48px 20px;text-align:center; } .confirmed-icon { width:64px;height:64px;margin:0 auto 14px;display:grid;place-items:center;border-radius:50%;background:var(--lime);font-size:28px; }
+    @media(max-width:850px){nav a{display:none}.hero{min-height:430px;padding-top:42px}main{margin-top:-120px}.search-panel{grid-template-columns:1fr 1fr}.search-button{grid-column:1/-1}.bus-card{grid-template-columns:1fr 1fr}.price{text-align:left}.modal-body{grid-template-columns:1fr}}
+    @media(max-width:520px){header{height:64px}nav .nav-button{display:none}.hero{padding-left:20px;min-height:390px}main{width:calc(100% - 32px)}.search-panel{grid-template-columns:1fr}.search-button{grid-column:auto}.results-head{align-items:flex-start;gap:12px;flex-direction:column}.date-tabs{width:100%;overflow-x:auto}.bus-card{grid-template-columns:1fr;gap:12px}.price{display:grid;grid-template-columns:1fr 120px;align-items:center}.select-seat{grid-column:2;margin-top:0}.modal-body{padding:16px}}
+  </style>
+</head>
+<body>
+  <header><div class="brand"><span class="brand-mark">◆</span> Busly</div><nav><a href="#results">My Trips</a><a href="#">Support</a><button class="nav-button">Sign in</button></nav></header>
+  <section class="hero"><div class="hero-content"><h1>Go somewhere worth going.</h1><p>Comfortable buses. Great routes. One simple booking.</p></div></section>
+  <main>
+    <form class="search-panel" id="searchForm">
+      <div class="field"><label>FROM</label><div class="control"><span>●</span><input id="from" value="Kathmandu" required></div></div>
+      <div class="field"><label>TO</label><div class="control"><span>●</span><input id="to" value="Pokhara" required></div></div>
+      <div class="field"><label>DEPARTURE</label><div class="control"><input id="date" type="date" required></div></div>
+      <div class="field"><label>PASSENGERS</label><div class="control"><select id="passengers"><option>1 Passenger</option><option>2 Passengers</option><option>3 Passengers</option><option>4 Passengers</option></select></div></div>
+      <button class="search-button" type="submit">Search buses</button>
+    </form>
+    <div class="results-head" id="results"><h2 id="routeTitle">Kathmandu to Pokhara</h2><div class="date-tabs"><button class="date-tab">Thu</button><button class="date-tab active">Fri</button><button class="date-tab">Sat</button><button class="date-tab">Sun</button></div></div>
+    <div class="bus-list" id="busList"></div>
+  </main>
+  <div class="booking-modal" id="modal"><div class="modal-card" id="modalCard">
+    <div class="modal-head"><h3>Select your seat</h3><button class="close" id="closeModal">×</button></div>
+    <div class="modal-body"><div><div class="seat-grid" id="seatGrid"></div></div><div><div class="passenger-form"><label>Passenger name</label><input id="passengerName" placeholder="Full name" required><label>Phone number</label><input id="phone" type="tel" placeholder="98XXXXXXXX" required></div><div class="summary"><div class="summary-row"><span>Seat</span><strong id="seatLabel">None</strong></div><div class="summary-row"><span>Fare</span><strong id="fareLabel">Rs. 0</strong></div><div class="summary-row total"><span>Total</span><strong id="totalLabel">Rs. 0</strong></div><button class="confirm" id="confirmBooking">Confirm booking</button></div></div></div>
+  </div></div>
+  <script>
+    const buses=[{operator:"Greenline Express",type:"AC Deluxe · 40 seats",icon:"G",depart:"06:30 AM",arrive:"12:15 PM",duration:"5h 45m",price:1450,amenities:["AC","Wi-Fi","Charging"]},{operator:"Mountain Travels",type:"Sleeper · 28 seats",icon:"M",depart:"07:45 AM",arrive:"02:10 PM",duration:"6h 25m",price:1280,amenities:["Recliner","Water","Blanket"]},{operator:"Sajha Deluxe",type:"AC Executive · 36 seats",icon:"S",depart:"09:00 AM",arrive:"03:20 PM",duration:"6h 20m",price:1350,amenities:["AC","Snacks","Wi-Fi"]}];
+    let selectedBus=null,selectedSeat=null; const busList=document.getElementById("busList"); document.getElementById("date").valueAsDate=new Date();
+    function renderBuses(){busList.innerHTML=buses.map((bus,index)=>`<article class="bus-card"><div class="operator"><div class="operator-icon">${bus.icon}</div><div><strong>${bus.operator}</strong><span>${bus.type}</span></div></div><div><div class="time">${bus.depart} <span style="color:#9aa39d">→</span> ${bus.arrive}</div><div class="route-duration">${bus.duration}</div><div class="amenities">${bus.amenities.map(item=>`<span class="amenity">${item}</span>`).join("")}</div></div><div></div><div class="price"><strong>Rs. ${bus.price}</strong><button class="select-seat" data-index="${index}">Select seat</button></div></article>`).join("");document.querySelectorAll(".select-seat").forEach(button=>button.addEventListener("click",()=>openModal(buses[button.dataset.index])));}
+    function openModal(bus){selectedBus=bus;selectedSeat=null;document.getElementById("seatLabel").textContent="None";document.getElementById("fareLabel").textContent=`Rs. ${bus.price}`;document.getElementById("totalLabel").textContent="Rs. 0";renderSeats();document.getElementById("modal").classList.add("open")}
+    function renderSeats(){const booked=new Set(["A2","A3","B2","C4","D1"]);const grid=document.getElementById("seatGrid");grid.innerHTML="";["A","B","C","D","E","F","G"].forEach(row=>{[1,2,3,4].forEach(col=>{const seatName=`${row}${col}`,button=document.createElement("button");button.className="seat";if(booked.has(seatName))button.classList.add("booked");button.textContent=seatName;button.disabled=booked.has(seatName);button.addEventListener("click",()=>selectSeat(seatName,button));grid.appendChild(button)})})}
+    function selectSeat(seat,button){document.querySelectorAll(".seat.selected").forEach(item=>item.classList.remove("selected"));button.classList.add("selected");selectedSeat=seat;document.getElementById("seatLabel").textContent=seat;document.getElementById("totalLabel").textContent=`Rs. ${selectedBus.price}`}
+    document.getElementById("closeModal").addEventListener("click",()=>document.getElementById("modal").classList.remove("open"));document.getElementById("modal").addEventListener("click",event=>{if(event.target.id==="modal")event.currentTarget.classList.remove("open")});
+    document.getElementById("confirmBooking").addEventListener("click",()=>{const name=document.getElementById("passengerName").value.trim(),phone=document.getElementById("phone").value.trim();if(!selectedSeat)return alert("Please select a seat.");if(!name||!phone)return alert("Please enter your name and phone number.");document.getElementById("modalCard").innerHTML=`<div class="confirmed"><div class="confirmed-icon">✓</div><h2>Booking confirmed</h2><p>Your seat <strong>${selectedSeat}</strong> on ${selectedBus.operator} is reserved.</p><p style="color:#69736d">Booking reference: BUS-${Math.floor(100000+Math.random()*900000)}</p><button class="confirm" id="doneButton" style="max-width:220px">Done</button></div>`;document.getElementById("doneButton").addEventListener("click",()=>document.getElementById("modal").classList.remove("open"))});
+    document.getElementById("searchForm").addEventListener("submit",event=>{event.preventDefault();const from=document.getElementById("from").value.trim(),to=document.getElementById("to").value.trim();if(from&&to)document.getElementById("routeTitle").textContent=`${from} to ${to}`});
+    renderBuses();
+  </script>
+</body>
+</html>
